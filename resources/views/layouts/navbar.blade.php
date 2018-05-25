@@ -12,7 +12,7 @@
 
   <div id="head-nav-bar" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="{{ route('threads') }}">
+      <a class="navbar-item" href="{{ route('threads.index') }}">
         All Threads
       </a>
     </div>
