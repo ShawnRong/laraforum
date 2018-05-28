@@ -15,6 +15,19 @@
       <a class="navbar-item" href="{{ route('threads.index') }}">
         All Threads
       </a>
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Channels
+        </a>
+        <div class="navbar-dropdown is-boxed">
+          @foreach(App\Channel::all() as $channel)
+            <a class="navbar-item" href="/threads/{{ $channel->slug }}">
+              {{ $channel->name }}
+            </a>
+          @endforeach
+        </div>
+      </div>
+    </div>
     </div>
 
     <div class="navbar-end">

@@ -30,11 +30,14 @@
         <article class="media">
           <div class="media-content">
             @if(auth()->check())
-            <form action="{{ route('add_reply_to_thread', $thread) }}" method="post">
+            <form action="{{ $thread->path() . '/replies' }}" method="post">
               {{ csrf_field() }}
               <div class="field">
                 <p class="control">
-                  <textarea class="textarea" placeholder="Have Something to say?" name="body" id="body"></textarea>
+                  <textarea class="textarea {{ $errors->has('body') ? 'is-danger' : '' }}" placeholder="Have Something to say?" name="body" id="body"></textarea>
+                  @if ($errors->has('body'))
+                    <p class="help is-danger">{{ $errors->first('body') }}</p>
+                  @endif
                 </p>
               </div>
               <nav class="level">
