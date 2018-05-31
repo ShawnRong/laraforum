@@ -13,17 +13,44 @@
           <div class="card-content">
             <div class="content">
               <form action="{{ route('threads.store') }}" method="POST">
+                @if(count($errors))
+                <article class="message is-danger">
+                  <div class="message-body">
+                    <ul>
+                      @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+                </article>
+                @endif
                 {{ csrf_field() }}
+                <div class="field">
+                  <div class="select">
+                    <select name="channel_id" required>
+                      <option value="">Choose a Channel:</option>
+                      @foreach($channels as $channel)
+                        <option value="{{ $channel->id}}" {{ old('channel_id') === $channel->id ? 'selected' : '' }}>{{ $channel->name }}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
                 <div class="field">
                   <label class="label">{{ __('Title') }}:</label>
                   <div class="control">
-                    <input class="input" type="text" name="title" value="{{ old('title') }}" required autofocus>
+                    <input class="input {{ $errors->has('title') ? 'is-danger' : '' }}" type="text" name="title" value="{{ old('title') }}" required autofocus>
+                    @if ($errors->has('title'))
+                      <p class="help is-danger">{{ $errors->first('title') }}</p>
+                    @endif
                   </div>
                 </div>
                 <div class="field">
                   <label class="label">{{ __('Body') }}:</label>
                   <div class="control">
-                    <textarea class="textarea" name="body"></textarea>
+                    <textarea class="textarea {{ $errors->has('title') ? 'is-danger' : '' }}" name="body" value="{{ old('body') }}"></textarea>
+                    @if ($errors->has('title'))
+                      <p class="help is-danger">{{ $errors->first('title') }}</p>
+                    @endif
                   </div>
                 </div>
                 <div class="field is-grouped">

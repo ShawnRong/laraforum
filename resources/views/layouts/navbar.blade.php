@@ -12,15 +12,30 @@
 
   <div id="head-nav-bar" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="{{ route('threads.index') }}">
-        All Threads
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          Browse
+        </a>
+        <div class="navbar-dropdown is-boxed">
+          <a class="navbar-item" href="{{ route('threads.index') }}">
+            All Threads
+          </a>
+          @if(auth()->check())
+          <a class="navbar-item" href="{{ route('threads.index') . '?by=' . auth()->user()->name }}">
+            My Threads
+          </a>
+          @endif
+        </div>
+      </div>
+      <a class="navbar-item" href="{{ route('threads.create') }}">
+        New Thread
       </a>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link">
           Channels
         </a>
         <div class="navbar-dropdown is-boxed">
-          @foreach(App\Channel::all() as $channel)
+          @foreach($channels as $channel)
             <a class="navbar-item" href="/threads/{{ $channel->slug }}">
               {{ $channel->name }}
             </a>
