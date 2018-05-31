@@ -22,9 +22,12 @@
 
       <!-- Reply List -->
       <div class="hero">
-        @foreach($thread->replies as $reply)
+        @foreach($replies as $reply)
           @include('threads.reply')
         @endforeach
+      </div>
+      <div class="main-card-top">
+        {{ $replies->links('layouts.paginator') }}
       </div>
       <div class="hero main-card-top">
         <article class="media">
@@ -51,6 +54,16 @@
             @endif
           </div>
         </article>
+      </div>
+    </div>
+    <div class="column is-4">
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            This thread was published {{ $thread->created_at->diffForHumans() }} by
+            <a href="#">{{ $thread->creator->name }}</a>, and currently has {{ $thread->replies_count }} {{str_plural('comment', $thread->replies_count)}}.
+          </div>
+        </div>
       </div>
     </div>
   </div>
