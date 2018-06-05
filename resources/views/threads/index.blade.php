@@ -14,9 +14,18 @@
             <div class="content">
               @foreach($threads as $thread)
                 <article>
-                  <a href="{{ $thread->path() }}">
-                    <h4>{{ $thread->title }}</h4>
-                  </a>
+                  <div class="columns">
+                    <div class="column is-10">
+                      <a href="{{ $thread->path() }}">
+                        <h4>{{ $thread->title }}</h4>
+                      </a>
+                    </div>
+                    <div class="column is-2">
+                      <a href="{{ $thread->path() }}">
+                        {{ $thread->replies_count }} {{ str_plural('reply', $thread->replies_count) }}
+                      </a>
+                    </div>
+                  </div>
                   <div class="body">{{ $thread->body }}</div>
                 </article>
                 <hr>

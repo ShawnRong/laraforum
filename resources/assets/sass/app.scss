@@ -8,6 +8,9 @@
 // Bulma
 @import '~bulma';
 
+//Ionicons
+@import "~ionicons/dist/scss/ionicons.scss";
+
 #login-form,
 #register-form,
 #reset-email-form,
@@ -22,4 +25,8 @@
 
 .reply-item-top {
   margin-top: 3%;
+}
+
+.is-red {
+  color: red;
 }

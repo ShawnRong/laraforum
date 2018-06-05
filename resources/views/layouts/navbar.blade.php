@@ -25,6 +25,9 @@
             My Threads
           </a>
           @endif
+          <a class="navbar-item" href="{{ route('threads.index') . '?popular=1'}}">
+            Popular Threads
+          </a>
         </div>
       </div>
       <a class="navbar-item" href="{{ route('threads.create') }}">
