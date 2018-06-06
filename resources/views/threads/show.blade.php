@@ -7,11 +7,22 @@
       <div class="card">
         <header class="card-header">
           <p class="card-header-title">
-            <a href="#">
+            <a href="{{ route('profile', $thread->creator) }}">
               {{ $thread->creator->name }}
             </a> posted:
             {{ $thread->title }}
           </p>
+          @can('update', $thread)
+            <form action="{{ $thread->path() }}" method="POST">
+              {{ csrf_field() }}
+              {{ method_field('DELETE') }}
+              <span class="icon is-large">
+              <button type="submit">
+                <i class="ion-md-trash"></i>
+              </button>
+            </span>
+            </form>
+          @endcan
         </header>
         <div class="card-content">
           <div class="content">

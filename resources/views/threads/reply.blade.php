@@ -1,7 +1,7 @@
 <div class="card reply-item-top">
   <header class="card-header">
     <p class="card-header-title">
-      <a href="#">
+      <a href="{{ route('profile', $reply->owner) }}">
         {{ $reply->owner->name }}
       </a> said:
       {{ $reply->created_at->diffForHumans() }}
@@ -10,7 +10,7 @@
       {{ csrf_field() }}
       <span class="icon is-large">
         <button type="submit" {{ $reply->isFavorited() ? 'disabled class=is-red': '' }} >
-          <i class="ion-md-heart disabled "></i>
+          <i class="ion-md-heart"></i>
           {{ $reply->favorites_count }}
         </button>
       </span>

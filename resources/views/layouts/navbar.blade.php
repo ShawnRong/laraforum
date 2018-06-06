@@ -62,6 +62,7 @@
           {{ Auth::user()->name }}
         </a>
         <div class="navbar-dropdown is-right is-boxed">
+          <a href="{{ route('profile', Auth::user()) }}" class="navbar-item">My Profile</a>
           <a class="navbar-item" href="{{ route('logout') }}" onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">
             {{ __('Logout') }}
