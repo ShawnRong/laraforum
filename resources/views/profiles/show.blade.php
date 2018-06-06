@@ -10,24 +10,15 @@
     </div>
     <hr>
     <div class="container">
-      @foreach($threads as $thread)
-        <div class="card">
-          <header class="card-header">
-            <p class="card-header-title">
-              {{ $thread->title }}
-            </p>
-            <p class="card-header-icon">
-              {{ $thread->created_at->diffForHumans() }}
-            </p>
-          </header>
-          <div class="card-content">
-            <div class="content">
-              {{ $thread->body }}
-            </div>
-          </div>
+      @foreach($activities as $date => $activity)
+        <div class="title is-3 main-card-top">
+          {{ $date }}
         </div>
+        <hr>
+        @foreach($activity as $record)
+          @include("profiles.activities.{$record->type}", ['activity' => $record])
+        @endforeach
       @endforeach
-      {{ $threads->links('layouts.paginator') }}
     </div>
   </div>
 @endsection
