@@ -22,7 +22,10 @@ Route::delete('threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::get('threads/{channel}', 'ThreadsController@index');
 Route::resource('threads', 'ThreadsController');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('add_reply_to_thread');
+Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::patch('/replies/{reply}', 'RepliesController@update');
 
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->name('add_favorite_to_reply');
+Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy')->name('unfavorite_a_reply');
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');

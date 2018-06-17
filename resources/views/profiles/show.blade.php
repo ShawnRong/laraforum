@@ -10,15 +10,19 @@
     </div>
     <hr>
     <div class="container">
-      @foreach($activities as $date => $activity)
+      @forelse($activities as $date => $activity)
         <div class="title is-3 main-card-top">
           {{ $date }}
         </div>
         <hr>
         @foreach($activity as $record)
-          @include("profiles.activities.{$record->type}", ['activity' => $record])
+          @if(view()->exists("profiles.activities.{$record->type}"))
+            @include("profiles.activities.{$record->type}", ['activity' => $record])
+          @endif
         @endforeach
-      @endforeach
+      @empty
+        <p>There is no activity for this user yet.</p>
+      @endforelse
     </div>
   </div>
 @endsection

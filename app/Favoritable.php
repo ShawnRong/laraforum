@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 trait Favoritable
 {
+    protected static function bootFavoritable()
+    {
+        static::deleting(function($model){
+            $model->favorites->each->delete();
+        });
+    }
 
     public function favorite($userId)
     {
@@ -13,6 +19,12 @@ trait Favoritable
         if (!$this->favorites()->where($attributes)->exists()) {
             $this->favorites()->create($attributes);
         }
+    }
+
+    public function unfavorite($userId)
+    {
+        $attributes = ['user_id' => $userId];
+        $this->favorites()->where($attributes)->get()->each->delete();
     }
 
     public function favorites()
@@ -29,6 +41,11 @@ trait Favoritable
     {
         //        return $this->favorites()->where('user_id', auth()->id())->exists();
         return !! $this->favorites->where('user_id', auth()->id())->count();
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited();
     }
 
 }

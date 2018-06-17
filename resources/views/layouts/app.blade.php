@@ -19,9 +19,15 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
 </head>
 <body>
     <div id="app">
+      <flash message="{{ session('flash') }}"></flash>
        @include('layouts.navbar')
       <main class="hero">
         @yield('content')

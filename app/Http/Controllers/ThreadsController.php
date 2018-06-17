@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Channel;
-use App\Thread;
 use App\Filters\ThreadFilters;
-use App\User;
+use App\Thread;
 use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
@@ -20,18 +19,34 @@ class ThreadsController extends Controller
     {
         $threads = $this->getThreads($channel, $filters);
 
-        if(request()->wantsJson()) {
+        if (request()->wantsJson()) {
             return $threads;
         }
 
         return view('threads.index', compact('threads'));
     }
 
+    /**
+     * @param \App\Channel $channel
+     * @param \App\Filters\ThreadFilters $filters
+     *
+     * @return mixed
+     */
+    protected function getThreads(Channel $channel, ThreadFilters $filters)
+    {
+        $threads = Thread::latest()->filter($filters);
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+        $threads = $threads->get();
+        return $threads;
+    }
+
     public function show($channelId, Thread $thread)
     {
         return view('threads.show', [
-            'thread'  =>  $thread,
-            'replies' => $thread->replies()->paginate(20)
+          'thread'  => $thread,
+          'replies' => $thread->replies()->paginate(20),
         ]);
     }
 
@@ -54,40 +69,25 @@ class ThreadsController extends Controller
           'title'      => request('title'),
           'body'       => request('body'),
         ]);
-        return redirect($thread->path());
+        return redirect($thread->path())->with('flash',
+          'Your thread has been published!');
     }
 
     public function destroy($channel, Thread $thread)
     {
         $this->authorize('update', $thread);
-//        if($thread->user_id != auth()->id()) {
-//            abort(403, 'You do not have permission to do this.');
-//            if(request()->wantsJson()) {
-//                return response(['status' => 'Permission Denied'], 403);
-//            }
-//            return redirect('/login');
-//        }
+        //        if($thread->user_id != auth()->id()) {
+        //            abort(403, 'You do not have permission to do this.');
+        //            if(request()->wantsJson()) {
+        //                return response(['status' => 'Permission Denied'], 403);
+        //            }
+        //            return redirect('/login');
+        //        }
 
         $thread->delete();
-        if(request()->wantsJson()) {
+        if (request()->wantsJson()) {
             return response([], 204);
         }
         return redirect('/threads');
-    }
-
-    /**
-     * @param \App\Channel $channel
-     * @param \App\Filters\ThreadFilters $filters
-     *
-     * @return mixed
-     */
-    protected function getThreads(Channel $channel, ThreadFilters $filters)
-    {
-        $threads = Thread::latest()->filter($filters);
-        if ($channel->exists) {
-            $threads->where('channel_id', $channel->id);
-        }
-        $threads = $threads->get();
-        return $threads;
     }
 }

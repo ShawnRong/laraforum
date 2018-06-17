@@ -1,4 +1,4 @@
-<nav class="navbar is-transparent is-info">
+<div class="navbar is-transparent is-info">
   <div class="navbar-brand">
     <a class="navbar-item" href="{{ route('home') }}">
       {{ config('app.name', 'Laravel') }}
@@ -75,4 +75,3 @@
       @endguest
     </div>
   </div>
-</nav>
