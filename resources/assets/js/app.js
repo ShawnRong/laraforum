@@ -9,6 +9,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+Vue.prototype.authorize = function(handler) {
+  let user = window.App.user;
+  return user ? handler(user) : false;
+}
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -16,7 +20,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('flash', require('./components/Flash.vue'));
-Vue.component('reply', require('./components/Reply.vue'));
+Vue.component('thread-view', require('./pages/Thread.vue'));
 
 window.events = new Vue();
 window.flash = function(message) {
