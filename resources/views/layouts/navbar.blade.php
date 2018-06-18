@@ -28,6 +28,9 @@
           <a class="navbar-item" href="{{ route('threads.index') . '?popular=1'}}">
             Popular Threads
           </a>
+          <a class="navbar-item" href="{{ route('threads.index') . '?unanswered=1'}}">
+            Unanswered Threads
+          </a>
         </div>
       </div>
       <a class="navbar-item" href="{{ route('threads.create') }}">
