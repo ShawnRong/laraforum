@@ -4,7 +4,7 @@
         <p class="card-header-title">
           <a :href="'/profiles/'+ data.owner.name" v-text="data.owner.name">
           </a> said:
-          {{ data.created_at }}
+          <span v-text="ago"></span>
         </p>
         <div v-if="signedIn">
           <favorite :reply="data"></favorite>
@@ -23,13 +23,16 @@
         </div>
       </div>
       <footer class="card-footer" v-if="canUpdate">
-        <a href="#" class="card-footer-item" @click="editing = true">Edit</a>
-        <a href="#" class="card-footer-item" @click="destroy">Delete</a>
+        <a class="card-footer-item" @click.prevent="editing = true">
+          Edit</a>
+        <a class="card-footer-item" @click.prevent="destroy">Delete</a>
       </footer>
     </div>
 </template>
 <script>
   import Favorite from './Favorite.vue';
+  import moment from 'moment';
+
   export default {
     props: ['data'],
     components: { Favorite },
@@ -46,6 +49,9 @@
       },
       canUpdate() {
         return this.authorize(user => this.data.user_id === user.id);
+      },
+      ago() {
+        return moment(this.data.created_at).fromNow();
       }
     },
     methods: {

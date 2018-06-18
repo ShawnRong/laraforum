@@ -33,7 +33,7 @@
         </div>
 
         <!-- Reply List -->
-        <replies :data="{{ $thread->replies }}" @added="repliesCount++" @removed="repliesCount--"></replies>
+        <replies  @added="repliesCount++" @removed="repliesCount--"></replies>
         {{--<div class="hero">--}}
           {{--@foreach($replies as $reply)--}}
             {{--@include('threads.reply')--}}
