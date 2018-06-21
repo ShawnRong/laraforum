@@ -9,7 +9,17 @@
             <header class="card-header">
               <p class="card-header-title">
                 <a href="{{ $thread->path() }}">
-                  {{ $thread->title }}
+                  @if(Auth::check())
+                    @if($thread->hasUpdatesFor(auth()->user()))
+                      {{ $thread->title }}
+                    @else
+                      <span class="has-read">
+                        {{ $thread->title }}
+                      </span>
+                    @endif
+                  @else
+                    {{ $thread->title }}
+                  @endif
                 </a>
               </p>
               <p class="card-header-icon">

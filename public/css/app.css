@@ -15056,6 +15056,10 @@ label.panel-block:hover {
   color: #ffffff;
 }
 
+.has-read {
+  font-weight: 400;
+}
+
 .reply-btn-padding {
   margin: 0.5rem 0;
 }

@@ -44,6 +44,12 @@ class ThreadsController extends Controller
 
     public function show($channelId, Thread $thread)
     {
+        //Record that user visited this page
+        //Record a timestamp
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show', compact('thread'));
     }
 

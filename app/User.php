@@ -2,11 +2,13 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+
     use Notifiable;
 
     /**
@@ -15,7 +17,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+      'name',
+      'email',
+      'password',
     ];
 
     /**
@@ -24,7 +28,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'email'
+      'password',
+      'remember_token',
+      'email',
     ];
 
     public function getRouteKeyName()
@@ -40,5 +46,18 @@ class User extends Authenticatable
     public function activity()
     {
         return $this->hasMany(Activity::class);
+    }
+
+    public function read($thread)
+    {
+        cache()->forever(
+          $this->visitedThreadCachedKey($thread),
+          Carbon::now()
+        );
+    }
+
+    public function visitedThreadCachedKey($thread)
+    {
+        return sprintf("user.%s.visits.%s", $this->id, $thread->id);
     }
 }

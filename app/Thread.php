@@ -51,7 +51,7 @@ class Thread extends Model
 
         //Prepare notifications for all subscribers.
         $this->notifySubscribers($reply);
-//        event(new ThreadHasNewReply($this, $reply));
+        //        event(new ThreadHasNewReply($this, $reply));
         //        $this->subscriptions->filter(function ($sub) use ($reply) {
         //            return $sub->user_id != $reply->user_id;
         //        })->each->notify($reply);
@@ -105,5 +105,13 @@ class Thread extends Model
     public function getIsSubscribedToAttribute()
     {
         return $this->subscriptions()->where('user_id', auth()->id())->exists();
+    }
+
+    public function hasUpdatesFor($user)
+    {
+        //Look in the cache for the proper key
+        //compare carbon instance with the $thread->updated_at
+        $key = $user->visitedThreadCachedKey($this);
+        return $this->updated_at > cache($key);
     }
 }
