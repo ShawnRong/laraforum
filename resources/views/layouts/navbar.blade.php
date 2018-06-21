@@ -60,6 +60,7 @@
           {{ __('Register') }}
         </a>
       @else
+      <user-notifications></user-notifications>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="#">
           {{ Auth::user()->name }}

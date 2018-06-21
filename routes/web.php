@@ -26,7 +26,13 @@ Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
 Route::patch('/replies/{reply}', 'RepliesController@update');
 
+Route::post('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@store')->middleware('auth');
+Route::delete('/threads/{channel}/{thread}/subscriptions', 'ThreadSubscriptionsController@destroy')->middleware('auth');
+
 Route::post('/replies/{reply}/favorites', 'FavoritesController@store')->name('add_favorite_to_reply');
 Route::delete('/replies/{reply}/favorites', 'FavoritesController@destroy')->name('unfavorite_a_reply');
 
 Route::get('/profiles/{user}', 'ProfilesController@show')->name('profile');
+
+Route::get('/profiles/{user}/notifications', 'UserNotificationsController@index');
+Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotificationsController@destroy');
