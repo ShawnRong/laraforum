@@ -30397,7 +30397,9 @@ Vue.component('thread-view', __webpack_require__(178));
 
 window.events = new Vue();
 window.flash = function (message) {
-  window.events.$emit('flash', message);
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'success';
+
+  window.events.$emit('flash', { message: message, level: level });
 };
 
 var app = new Vue({
@@ -64082,7 +64084,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       body: '',
-      show: false
+      show: false,
+      level: 'success'
     };
   },
   created: function created() {
@@ -64091,14 +64094,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     if (this.message) {
       this.flash(this.message);
     }
-    window.events.$on('flash', function (message) {
-      _this.flash(message);
+    window.events.$on('flash', function (data) {
+      _this.flash(data);
     });
   },
 
   methods: {
-    flash: function flash(message) {
-      this.body = message;
+    flash: function flash(data) {
+      this.body = data.message;
+      this.level = data.level;
       this.show = true;
       this.hide();
     },
@@ -64126,13 +64130,14 @@ var render = function() {
       directives: [
         { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
       ],
-      staticClass: "message is-success alert-flash"
+      staticClass: "message alert-flash",
+      class: "is-" + _vm.level
     },
     [
-      _c("div", { staticClass: "message-body" }, [
-        _c("strong", [_vm._v("Success!")]),
-        _vm._v(" " + _vm._s(_vm.body) + "\n  ")
-      ])
+      _c("div", {
+        staticClass: "message-body",
+        domProps: { textContent: _vm._s(_vm.body) }
+      })
     ]
   )
 }
@@ -64775,6 +64780,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     update: function update() {
       axios.patch('/replies/' + this.data.id, {
         body: this.body
+      }).catch(function (error) {
+        flash(error.response.data, 'danger');
       });
       this.editing = false;
       flash('Updated!');
@@ -65392,6 +65399,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -65409,7 +65417,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     addReply: function addReply() {
       var _this = this;
 
-      axios.post(location.pathname + '/replies', { body: this.body }).then(function (_ref) {
+      axios.post(location.pathname + '/replies', { body: this.body }).catch(function (error) {
+        flash(error.response.data, 'danger');
+      }).then(function (_ref) {
         var data = _ref.data;
 
         _this.body = '';
@@ -65473,7 +65483,7 @@ var render = function() {
                       attrs: { type: "submit" },
                       on: { click: _vm.addReply }
                     },
-                    [_vm._v("Post\n          ")]
+                    [_vm._v("\n              Post\n            ")]
                   )
                 ])
               ])
@@ -65491,7 +65501,7 @@ var staticRenderFns = [
     return _c("p", [
       _vm._v("Please "),
       _c("a", { attrs: { href: "/login" } }, [_vm._v("sign in")]),
-      _vm._v(" to participate in this\n        discussion")
+      _vm._v(" to participate in this\n          discussion")
     ])
   }
 ]

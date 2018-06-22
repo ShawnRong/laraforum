@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Inspections\Spam;
 use App\Reply;
 use App\Thread;
 
@@ -20,25 +21,27 @@ class RepliesController extends Controller
 
     public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), ['body' => 'required']);
-
-        $reply = $thread->addReply([
-          'body'    => request('body'),
-          'user_id' => auth()->id(),
-        ]);
-        if(request()->expectsJson()) {
-            return $reply->load('owner');
+        try {
+            request()->validate(['body' => 'required|spamfree']);
+            $reply = $thread->addReply([
+              'body'    => request('body'),
+              'user_id' => auth()->id(),
+            ]);
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time.',
+              422);
         }
 
-        return back();
+        return $reply->load('owner');
     }
+
 
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);
         $reply->delete();
 
-        if(request()->expectsJson()) {
+        if (request()->expectsJson()) {
             return response(['status' => 'Reply deleted']);
         }
         return back();
@@ -47,6 +50,14 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
-        $reply->update(['body' => request('body')]);
+
+        try {
+            request()->validate(['body' => 'required|spamfree']);
+
+            $reply->update(['body' => request('body')]);
+        } catch (\Exception $e) {
+            return response('Sorry, your reply could not be saved at this time.',
+              422);
+        }
     }
 }

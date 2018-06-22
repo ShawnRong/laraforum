@@ -9,16 +9,12 @@
             <header class="card-header">
               <p class="card-header-title">
                 <a href="{{ $thread->path() }}">
-                  @if(Auth::check())
-                    @if($thread->hasUpdatesFor(auth()->user()))
-                      {{ $thread->title }}
-                    @else
-                      <span class="has-read">
-                        {{ $thread->title }}
-                      </span>
-                    @endif
-                  @else
+                  @if(auth()->check() && $thread->hasUpdatesFor(auth()->user()))
                     {{ $thread->title }}
+                  @else
+                    <span class="has-read">
+                      {{ $thread->title }}
+                    </span>
                   @endif
                 </a>
               </p>
