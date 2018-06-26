@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Exceptions\ThrottleException;
+use App\Notifications\YouWereMentioned;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
@@ -38,9 +40,21 @@ class CreatePostRequest extends FormRequest
 
     public function persist($thread)
     {
-        return $thread->addReply([
+        $reply = $thread->addReply([
           'body'    => request('body'),
           'user_id' => auth()->id(),
-        ])->load('owner');
+        ]);
+
+//        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
+        $mentionedUsers = $reply->mentionedUsers();
+
+        foreach ($mentionedUsers as $name) {
+            $user = User::whereName($name)->first();
+            if($user) {
+                $user->notify(new YouWereMentioned($reply));
+            }
+        }
+
+        return $reply->load('owner');
     }
 }
