@@ -8,6 +8,7 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title">
+              <img src="{{ $thread->creator->avatar_path }}" alt="{{ $thread->creator->name }}" width="25" height="25"/>
               <a href="{{ route('profile', $thread->creator) }}">
                 {{ $thread->creator->name }}
               </a> posted:

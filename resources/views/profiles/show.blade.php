@@ -2,12 +2,7 @@
 
 @section('content')
   <div class="container">
-    <div class="profile main-card-top">
-      <span class="title is-1">
-        {{ $profileUser->name }}
-      </span>
-      Since {{ $profileUser->created_at->diffForHumans() }}
-    </div>
+    <avatar-form :user="{{ $profileUser }}"></avatar-form>
     <hr>
     <div class="container">
       @forelse($activities as $date => $activity)
