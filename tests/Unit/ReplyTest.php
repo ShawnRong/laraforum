@@ -5,12 +5,12 @@ namespace Tests\Unit;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ReplyTest extends TestCase
 {
+
     use DatabaseMigrations;
+
     /** @test */
     function it_has_an_owner()
     {
@@ -30,9 +30,21 @@ class ReplyTest extends TestCase
     /** @test */
     function it_can_detect_all_mentioned_users_in_the_body()
     {
-        $reply = create('App\Reply', [
-            'body'  => '@JaneDoe wants to talk to @JohnDoe'
+        $reply = new \App\Reply([
+          'body' => '@JaneDoe wants to talk to @JohnDoe',
         ]);
         $this->assertEquals(['JaneDoe', 'JohnDoe'], $reply->mentionedUsers());
+    }
+
+    /** @test */
+    function it_wraps_mentioned_usernames_in_the_body_within_anchor_tags()
+    {
+        $reply = create('App\Reply', [
+          'body' => 'Hello @JaneDoe.',
+        ]);
+        $this->assertEquals(
+          'Hello <a href="/profiles/JaneDoe">@JaneDoe</a>.',
+          $reply->body
+        );
     }
 }

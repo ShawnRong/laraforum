@@ -45,7 +45,6 @@ class CreatePostRequest extends FormRequest
           'user_id' => auth()->id(),
         ]);
 
-//        preg_match_all('/\@([^\s\.]+)/', $reply->body, $matches);
         $mentionedUsers = $reply->mentionedUsers();
 
         foreach ($mentionedUsers as $name) {

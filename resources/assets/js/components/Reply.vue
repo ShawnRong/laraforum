@@ -13,13 +13,17 @@
       <div class="card-content">
         <div class="content">
           <div v-if="editing">
-            <textarea class="textarea" v-model="body"></textarea>
-            <div class="container reply-btn-padding">
-              <button class="button is-info" @click="update">Update</button>
-              <button class="button is-danger" @click="editing = false">Cancel</button>
-            </div>
+            <form @submit="update">
+              <textarea class="textarea" v-model="body" required></textarea>
+              <div class="container reply-btn-padding">
+                <button class="button is-info">Update</button>
+                <button class="button is-danger" @click="editing = false"
+                  type="button">
+                  Cancel</button>
+              </div>
+            </form>
           </div>
-          <div v-else v-text="body"></div>
+          <div v-else v-html="body"></div>
         </div>
       </div>
       <footer class="card-footer" v-if="canUpdate">
