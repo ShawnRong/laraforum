@@ -34,6 +34,17 @@
         {{ $thread->body }}
       </div>
     </div>
+    <footer class="card-footer">
+      <div class="card-footer-item">
+        {{ $thread->visits()->count() }} Visits
+      </div>
+      <div class="card-footer-item">
+      </div>
+      <div class="card-footer-item">
+      </div>
+      <div class="card-footer-item">
+      </div>
+    </footer>
   </div>
 @empty
   <p>There are no relevant results at this time.</p>
