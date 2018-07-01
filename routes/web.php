@@ -21,6 +21,7 @@ Route::get('threads/{channel}/{thread}', 'ThreadsController@show');
 Route::delete('threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::get('threads/{channel}', 'ThreadsController@index');
 Route::resource('threads', 'ThreadsController');
+Route::post('threads', 'ThreadsController@store')->middleware('must-be-confirmed');
 Route::post('/threads/{channel}/{thread}/replies', 'RepliesController@store')->name('add_reply_to_thread');
 Route::get('/threads/{channel}/{thread}/replies', 'RepliesController@index');
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
@@ -40,3 +41,4 @@ Route::delete('/profiles/{user}/notifications/{notification}', 'UserNotification
 Route::get('api/users', 'Api\UsersController@index');
 Route::post('api/users/{user}/avatar', 'Api\UserAvatarController@store')->name('avatar_path');
 
+Route::get('/register/confirm', 'Api\RegisterConfirmationController@index');

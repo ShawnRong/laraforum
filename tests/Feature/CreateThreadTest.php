@@ -22,7 +22,7 @@ class CreateThreadTest extends TestCase
     }
 
     /** @test */
-    function an_authenticate_user_can_create_new_forum_threads()
+    function an_user_can_create_new_forum_threads()
     {
         $this->signIn();
 
@@ -80,11 +80,11 @@ class CreateThreadTest extends TestCase
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
         $this->assertEquals(0, Activity::count());
-//        $this->assertDatabaseMissing('activities',
-//          ['subject_id' => $thread->id, 'subject_type' => get_class($thread)]);
-//
-//        $this->assertDatabaseMissing('activities',
-//          ['subject_id' => $reply->id, 'subject_type' => get_class($reply)]);
+        //        $this->assertDatabaseMissing('activities',
+        //          ['subject_id' => $thread->id, 'subject_type' => get_class($thread)]);
+        //
+        //        $this->assertDatabaseMissing('activities',
+        //          ['subject_id' => $reply->id, 'subject_type' => get_class($reply)]);
     }
 
     /** @test */
@@ -100,5 +100,20 @@ class CreateThreadTest extends TestCase
     public function threads_may_only_be_deleted_by_those_who_have_permission()
     {
         //TODO:
+    }
+
+    /** @test */
+    public function new_users_must_first_confirm_their_email_address_before_creating_threads(
+    )
+    {
+        $user = factory('App\User')->states('unconfirmed')->create();
+        $this->withExceptionHandling()->signIn($user);
+
+        $thread = make('App\Thread');
+
+        $this->post('/threads', $thread->toArray())
+             ->assertRedirect('/threads')
+             ->assertSessionHas('flash',
+               'You must first confirm your email address.');
     }
 }

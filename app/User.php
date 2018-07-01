@@ -21,7 +21,9 @@ class User extends Authenticatable
       'email',
       'password',
       'avatar_path',
+      'confirmation_token',
     ];
+
 
     /**
      * The attributes that should be hidden for arrays.
@@ -32,6 +34,10 @@ class User extends Authenticatable
       'password',
       'remember_token',
       'email',
+    ];
+
+    protected $casts = [
+      'confirmed' => 'boolean',
     ];
 
     public function getRouteKeyName()
@@ -70,6 +76,12 @@ class User extends Authenticatable
     public function getAvatarPathAttribute($avatar)
     {
         return asset($avatar ? '/storage/' . $avatar : 'images/avatars/default.jpg');
+    }
+
+    public function confirm()
+    {
+        $this->confirmed = true;
+        $this->save();
     }
 
 }
